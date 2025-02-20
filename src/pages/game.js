@@ -23,9 +23,9 @@ export default function Game() {
 
   useEffect(() => {
     // Define os caminhos das imagens
-    images.current.jesus.src = "/assets/JESUS.png"; 
-    images.current.follower.src = "/assets/1.png";
-    images.current.bible.src = "/assets/biblia.png";
+    images.current.jesus.src = "./assets/JESUS.png"; 
+    images.current.follower.src = "./assets/1.png";
+    images.current.bible.src = "./assets/biblia.png";
 
     let loadedCount = 0;
     const totalImages = Object.keys(images.current).length;
