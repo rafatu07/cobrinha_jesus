@@ -6,7 +6,6 @@ const GRID_SIZE = 20;
 const CELL_SIZE = 20;
 const CANVAS_SIZE = GRID_SIZE * CELL_SIZE;
 
-// Desativa a renderização no servidor para evitar o erro
 const Game = () => {
   const router = useRouter();
   const { name } = router.query;
@@ -17,15 +16,10 @@ const Game = () => {
   const [direction, setDirection] = useState({ x: 1, y: 0 });
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // Criar imagens apenas no CLIENTE
-  const images = useRef({
-    jesus: null,
-    follower: null,
-    bible: null,
-  });
+  const images = useRef({ jesus: null, follower: null, bible: null });
 
   useEffect(() => {
-    if (typeof window === "undefined") return; // Impede execução no servidor
+    if (typeof window === "undefined") return;
 
     images.current.jesus = new window.Image();
     images.current.follower = new window.Image();
@@ -57,7 +51,6 @@ const Game = () => {
 
     const drawGame = () => {
       ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-
       ctx.strokeStyle = "black";
       ctx.lineWidth = 2;
       ctx.strokeRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
@@ -134,6 +127,16 @@ const Game = () => {
       <h1 className="text-3xl font-bold">Jogador: {name}</h1>
       {!imagesLoaded && <p>Carregando...</p>}
       <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE} className="border mt-4"></canvas>
+
+      {/* Controles Touch */}
+      <div className="mt-4 flex flex-col items-center gap-2">
+        <button className="p-2 bg-blue-500 text-white rounded" onClick={() => setDirection({ x: 0, y: -1 })}>▲</button>
+        <div className="flex gap-2">
+          <button className="p-2 bg-blue-500 text-white rounded" onClick={() => setDirection({ x: -1, y: 0 })}>◀</button>
+          <button className="p-2 bg-blue-500 text-white rounded" onClick={() => setDirection({ x: 1, y: 0 })}>▶</button>
+        </div>
+        <button className="p-2 bg-blue-500 text-white rounded" onClick={() => setDirection({ x: 0, y: 1 })}>▼</button>
+      </div>
     </div>
   );
 };
