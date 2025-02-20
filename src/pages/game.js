@@ -129,14 +129,39 @@ const Game = () => {
       <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE} className="border mt-4"></canvas>
 
       {/* Controles Touch */}
-      <div className="mt-4 flex flex-col items-center gap-2">
-        <button className="p-2 bg-blue-500 text-white rounded" onClick={() => setDirection({ x: 0, y: -1 })}>▲</button>
-        <div className="flex gap-2">
-          <button className="p-2 bg-blue-500 text-white rounded" onClick={() => setDirection({ x: -1, y: 0 })}>◀</button>
-          <button className="p-2 bg-blue-500 text-white rounded" onClick={() => setDirection({ x: 1, y: 0 })}>▶</button>
-        </div>
-        <button className="p-2 bg-blue-500 text-white rounded" onClick={() => setDirection({ x: 0, y: 1 })}>▼</button>
-      </div>
+      <div className="mt-8 flex flex-col items-center relative w-32 h-32">
+  {/* Cima */}
+  <button
+    className="absolute top-0 left-1/2 transform -translate-x-1/2 p-4 bg-blue-500 text-white rounded-full shadow-lg active:scale-90"
+    onClick={() => setDirection({ x: 0, y: -1 })}
+  >
+    ▲
+  </button>
+
+  {/* Esquerda */}
+  <button
+    className="absolute left-0 top-1/2 transform -translate-y-1/2 p-4 bg-blue-500 text-white rounded-full shadow-lg active:scale-90"
+    onClick={() => setDirection({ x: -1, y: 0 })}
+  >
+    ◀
+  </button>
+
+  {/* Direita */}
+  <button
+    className="absolute right-0 top-1/2 transform -translate-y-1/2 p-4 bg-blue-500 text-white rounded-full shadow-lg active:scale-90"
+    onClick={() => setDirection({ x: 1, y: 0 })}
+  >
+    ▶
+  </button>
+
+  {/* Baixo */}
+  <button
+    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 p-4 bg-blue-500 text-white rounded-full shadow-lg active:scale-90"
+    onClick={() => setDirection({ x: 0, y: 1 })}
+  >
+    ▼
+  </button>
+</div>
     </div>
   );
 };
