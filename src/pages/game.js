@@ -126,7 +126,7 @@ const Game = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-cover bg-center" 
-    style={{ backgroundImage: "url('/assets/fundo.jpg')" }}>
+    style={{ backgroundImage: "url('/assets/fundo-ti.png')" }}>
       <h1 className="text-3xl font-bold text-white">Jogador: {name}</h1>
       {!imagesLoaded && <p className="text-white">Carregando...</p>}
       <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE} className="border mt-4"></canvas>

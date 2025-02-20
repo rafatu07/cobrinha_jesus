@@ -5,10 +5,16 @@ export default function End() {
   const { win, score } = router.query;
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-cover bg-center" 
-    style={{ backgroundImage: "url('/assets/fundo.jpg')" }}>
+    <div
+      className="flex flex-col items-center justify-center h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/assets/fundo-ti.png')" }}
+    >
+      <div className="absolute top-3">
+       <img src="/assets/logo-ti-completo-branco.png" alt="Logo" className="w-32 h-auto" />
+      </div>
+
       {win === "true" ? (
-        <h1 className="text-4xl font-bold text-green-600">🏆 Parabéns! Você venceu! Jesus Escolheu 12 Apóstolos 🏆</h1>
+        <h1 className="text-4xl font-bold text-green-600">🏆 Parabéns! Você venceu! 🏆</h1>
       ) : (
         <h1 className="text-4xl font-bold text-red-600">💔 Você perdeu! 💔</h1>
       )}
@@ -20,7 +26,7 @@ export default function End() {
         Jogar Novamente
       </button>
       <div className="absolute bottom-4">
-       <img src="/assets/ti.jpeg" alt="Logo" className="w-24 h-auto" />
+       <h1 className="text-1xl  text-white">START VOITHOS | TI</h1>
       </div>
     </div>
   );

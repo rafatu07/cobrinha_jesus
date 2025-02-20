@@ -14,8 +14,11 @@ export default function Home() {
   return (
     <div
       className="flex flex-col items-center justify-center h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/assets/fundo.jpg')" }}
+      style={{ backgroundImage: "url('/assets/fundo-ti.png')" }}
     >
+      <div className="absolute top-3">
+       <img src="/assets/logo-ti-completo-branco.png" alt="Logo" className="w-32 h-auto" />
+      </div>
 
       <h1 className="text-3xl font-bold text-white">JESUS É O CAMINHO</h1>
       <input
@@ -29,7 +32,7 @@ export default function Home() {
         Iniciar Jogo
       </button>
       <div className="absolute bottom-4">
-       <img src="/assets/ti.jpeg" alt="Logo" className="w-24 h-auto" />
+       <h1 className="text-1xl  text-white">START VOITHOS | TI</h1>
       </div>
     </div>
   );
