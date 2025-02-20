@@ -26,7 +26,7 @@ export default function End() {
         Jogar Novamente
       </button>
       <div className="absolute bottom-4">
-       <h1 className="text-1xl  text-white">START VOITHOS | TI</h1>
+       <h1 className="text-1xl  text-white">START - VOITHOS | TI</h1>
       </div>
     </div>
   );
