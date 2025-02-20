@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 const GRID_SIZE = 20;
 const CELL_SIZE = 20;
 const CANVAS_SIZE = GRID_SIZE * CELL_SIZE;
 
-export default function Game() {
+// Desativa a renderização no servidor para evitar o erro
+const Game = () => {
   const router = useRouter();
   const { name } = router.query;
   const canvasRef = useRef(null);
@@ -15,6 +17,7 @@ export default function Game() {
   const [direction, setDirection] = useState({ x: 1, y: 0 });
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
+  // Criar imagens apenas no CLIENTE
   const images = useRef({
     jesus: null,
     follower: null,
@@ -22,31 +25,28 @@ export default function Game() {
   });
 
   useEffect(() => {
-    // Garantindo que o código só rode no cliente
-    if (typeof window !== "undefined") {
-      images.current.jesus = new Image();
-      images.current.follower = new Image();
-      images.current.bible = new Image();
+    if (typeof window === "undefined") return; // Impede execução no servidor
 
-      images.current.jesus.src = "/assets/JESUS.png";
-      images.current.follower.src = "/assets/1.png";
-      images.current.bible.src = "/assets/biblia.png";
+    images.current.jesus = new window.Image();
+    images.current.follower = new window.Image();
+    images.current.bible = new window.Image();
 
-      let loadedCount = 0;
-      const totalImages = Object.keys(images.current).length;
+    images.current.jesus.src = "/assets/JESUS.png";
+    images.current.follower.src = "/assets/1.png";
+    images.current.bible.src = "/assets/biblia.png";
 
-      Object.values(images.current).forEach((img) => {
-        img.onload = () => {
-          loadedCount++;
-          if (loadedCount === totalImages) {
-            setImagesLoaded(true);
-          }
-        };
-        img.onerror = () => {
-          console.error(`Erro ao carregar a imagem: ${img.src}`);
-        };
-      });
-    }
+    let loadedCount = 0;
+    const totalImages = Object.keys(images.current).length;
+
+    Object.values(images.current).forEach((img) => {
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          setImagesLoaded(true);
+        }
+      };
+      img.onerror = () => console.error(`Erro ao carregar: ${img.src}`);
+    });
   }, []);
 
   useEffect(() => {
@@ -58,36 +58,27 @@ export default function Game() {
     const drawGame = () => {
       ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-      // Desenha as bordas
       ctx.strokeStyle = "black";
       ctx.lineWidth = 2;
       ctx.strokeRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-      // Desenha Jesus
       if (images.current.jesus) {
         ctx.drawImage(images.current.jesus, jesus.x * CELL_SIZE, jesus.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
 
-      // Desenha seguidores
       followers.forEach((f) => {
         if (images.current.follower) {
           ctx.drawImage(images.current.follower, f.x * CELL_SIZE, f.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
       });
 
-      // Desenha a Bíblia
       if (images.current.bible) {
         ctx.drawImage(images.current.bible, bible.x * CELL_SIZE, bible.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
     };
 
     const gameLoop = setInterval(() => {
-      setFollowers((prevFollowers) => {
-        if (prevFollowers.length > 0) {
-          return [jesus, ...prevFollowers.slice(0, -1)];
-        }
-        return prevFollowers;
-      });
+      setFollowers((prev) => (prev.length > 0 ? [jesus, ...prev.slice(0, -1)] : prev));
 
       setJesus((prev) => {
         const newPosition = { x: prev.x + direction.x, y: prev.y + direction.y };
@@ -95,13 +86,11 @@ export default function Game() {
         if (newPosition.x === bible.x && newPosition.y === bible.y) {
           setFollowers((prev) => {
             const newFollowers = [...prev, bible];
-
             if (newFollowers.length === 12) {
               clearInterval(gameLoop);
               router.push(`/end?win=true&score=${newFollowers.length}`);
               return newFollowers;
             }
-
             return newFollowers;
           });
           setBible(generateRandomPosition());
@@ -147,4 +136,7 @@ export default function Game() {
       <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE} className="border mt-4"></canvas>
     </div>
   );
-}
+};
+
+// 🚀 Desativa SSR para evitar erro
+export default dynamic(() => Promise.resolve(Game), { ssr: false });
