@@ -13,39 +13,44 @@ export default function Game() {
   const [followers, setFollowers] = useState([]);
   const [bible, setBible] = useState(generateRandomPosition());
   const [direction, setDirection] = useState({ x: 1, y: 0 });
-  const [imagesLoaded, setImagesLoaded] = useState(false); // Indica se as imagens foram carregadas
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   const images = useRef({
-    jesus: new Image(),
-    follower: new Image(),
-    bible: new Image(),
+    jesus: null,
+    follower: null,
+    bible: null,
   });
 
   useEffect(() => {
-    // Define os caminhos das imagens
-    images.current.jesus.src = "./assets/JESUS.png"; 
-    images.current.follower.src = "./assets/1.png";
-    images.current.bible.src = "./assets/biblia.png";
+    // Garantindo que o código só rode no cliente
+    if (typeof window !== "undefined") {
+      images.current.jesus = new Image();
+      images.current.follower = new Image();
+      images.current.bible = new Image();
 
-    let loadedCount = 0;
-    const totalImages = Object.keys(images.current).length;
+      images.current.jesus.src = "/assets/JESUS.png";
+      images.current.follower.src = "/assets/1.png";
+      images.current.bible.src = "/assets/biblia.png";
 
-    // Verifica quando todas as imagens foram carregadas
-    Object.values(images.current).forEach(img => {
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === totalImages) {
-          setImagesLoaded(true);
-        }
-      };
-      img.onerror = () => {
-        console.error(`Erro ao carregar a imagem: ${img.src}`);
-      };
-    });
+      let loadedCount = 0;
+      const totalImages = Object.keys(images.current).length;
+
+      Object.values(images.current).forEach((img) => {
+        img.onload = () => {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            setImagesLoaded(true);
+          }
+        };
+        img.onerror = () => {
+          console.error(`Erro ao carregar a imagem: ${img.src}`);
+        };
+      });
+    }
   }, []);
 
   useEffect(() => {
-    if (!imagesLoaded) return; // Só desenha o jogo quando as imagens estiverem carregadas
+    if (!imagesLoaded) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -53,36 +58,42 @@ export default function Game() {
     const drawGame = () => {
       ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-      // Bordas do jogo
+      // Desenha as bordas
       ctx.strokeStyle = "black";
       ctx.lineWidth = 2;
       ctx.strokeRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
       // Desenha Jesus
-      ctx.drawImage(images.current.jesus, jesus.x * CELL_SIZE, jesus.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      if (images.current.jesus) {
+        ctx.drawImage(images.current.jesus, jesus.x * CELL_SIZE, jesus.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
 
-      // Desenha os seguidores
-      followers.forEach(f => {
-        ctx.drawImage(images.current.follower, f.x * CELL_SIZE, f.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      // Desenha seguidores
+      followers.forEach((f) => {
+        if (images.current.follower) {
+          ctx.drawImage(images.current.follower, f.x * CELL_SIZE, f.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        }
       });
 
       // Desenha a Bíblia
-      ctx.drawImage(images.current.bible, bible.x * CELL_SIZE, bible.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      if (images.current.bible) {
+        ctx.drawImage(images.current.bible, bible.x * CELL_SIZE, bible.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
     };
 
     const gameLoop = setInterval(() => {
-      setFollowers(prevFollowers => {
+      setFollowers((prevFollowers) => {
         if (prevFollowers.length > 0) {
           return [jesus, ...prevFollowers.slice(0, -1)];
         }
         return prevFollowers;
       });
 
-      setJesus(prev => {
+      setJesus((prev) => {
         const newPosition = { x: prev.x + direction.x, y: prev.y + direction.y };
 
         if (newPosition.x === bible.x && newPosition.y === bible.y) {
-          setFollowers(prev => {
+          setFollowers((prev) => {
             const newFollowers = [...prev, bible];
 
             if (newFollowers.length === 12) {
