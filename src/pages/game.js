@@ -51,6 +51,8 @@ const Game = () => {
 
     const drawGame = () => {
       ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
       ctx.strokeStyle = "black";
       ctx.lineWidth = 2;
       ctx.strokeRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
@@ -123,16 +125,17 @@ const Game = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-3xl font-bold">Jogador: {name}</h1>
-      {!imagesLoaded && <p>Carregando...</p>}
+    <div className="flex flex-col items-center justify-center h-screen bg-cover bg-center" 
+    style={{ backgroundImage: "url('/assets/fundo.jpg')" }}>
+      <h1 className="text-3xl font-bold text-white">Jogador: {name}</h1>
+      {!imagesLoaded && <p className="text-white">Carregando...</p>}
       <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE} className="border mt-4"></canvas>
 
       {/* Controles Touch */}
       <div className="mt-8 flex flex-col items-center relative w-32 h-32">
   {/* Cima */}
   <button
-    className="absolute top-0 left-1/2 transform -translate-x-1/2 p-4 bg-blue-500 text-white rounded-full shadow-lg active:scale-90"
+    className="absolute top-0 left-1/2 transform -translate-x-1/2 p-4 bg-red-500 text-white rounded-full shadow-lg active:scale-90"
     onClick={() => setDirection({ x: 0, y: -1 })}
   >
     ▲
@@ -140,7 +143,7 @@ const Game = () => {
 
   {/* Esquerda */}
   <button
-    className="absolute left-0 top-1/2 transform -translate-y-1/2 p-4 bg-blue-500 text-white rounded-full shadow-lg active:scale-90"
+    className="absolute left-0 top-1/2 transform -translate-y-1/2 p-4 bg-red-500 text-white rounded-full shadow-lg active:scale-90"
     onClick={() => setDirection({ x: -1, y: 0 })}
   >
     ◀
@@ -148,7 +151,7 @@ const Game = () => {
 
   {/* Direita */}
   <button
-    className="absolute right-0 top-1/2 transform -translate-y-1/2 p-4 bg-blue-500 text-white rounded-full shadow-lg active:scale-90"
+    className="absolute right-0 top-1/2 transform -translate-y-1/2 p-4 bg-red-500 text-white rounded-full shadow-lg active:scale-90"
     onClick={() => setDirection({ x: 1, y: 0 })}
   >
     ▶
@@ -156,7 +159,7 @@ const Game = () => {
 
   {/* Baixo */}
   <button
-    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 p-4 bg-blue-500 text-white rounded-full shadow-lg active:scale-90"
+    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 p-4 bg-red-500 text-white rounded-full shadow-lg active:scale-90"
     onClick={() => setDirection({ x: 0, y: 1 })}
   >
     ▼
