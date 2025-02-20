@@ -13,7 +13,7 @@ export default function Home() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center h-screen bg-cover bg-center"
+      className="flex flex-col items-center justify-center h-screen bg-cover bg-center overflow-hidden"
       style={{ backgroundImage: "url('/assets/fundo-ti.png')" }}
     >
       <div className="absolute top-3">
