@@ -31,9 +31,6 @@ export default function Home() {
       <button onClick={startGame} className="bg-blue-500 text-white px-4 py-2 mt-2">
         Iniciar Jogo
       </button>
-      <div className="absolute bottom-4">
-       <h1 className="text-1xl  text-white">START - VOITHOS | TI</h1>
-      </div>
     </div>
   );
 }
